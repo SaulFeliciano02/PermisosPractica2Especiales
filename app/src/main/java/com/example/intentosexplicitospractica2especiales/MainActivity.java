@@ -21,23 +21,15 @@ public class MainActivity extends AppCompatActivity{
 
     private TextView btnAceptar, btnCancelar;
     private Switch swiAlmacenamiento, swiUbicacion, swiCamara, swiTelefono, swiContactos;
-    private int CAMERA_PERMISSION_CODE = 100;
-    private int LOCATION_PERMISSION_CODE = 101;
-    private int PHONE_PERMISSION_CODE = 102;
-    private int CONTACTS_PERMISSION_CODE = 103;
-    private int STORAGE_PERMISSION_CODE = 104;
     private ArrayList<String> permisos = new ArrayList<>();
-    private ArrayList<Integer> codigos = new ArrayList<>();
-    private boolean CENTINELA = false;
+    private int PERMISOS_PERMISSION_CODE = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnAceptar = findViewById(R.id.btnAceptar);
-        //btnAceptar.setOnClickListener(this);
         btnCancelar = findViewById(R.id.btnCancelar);
-        //btnCancelar.setOnClickListener(this);
         swiAlmacenamiento = findViewById(R.id.swiAlmacenamiento);
         swiUbicacion = findViewById(R.id.swiUbicacion);
         swiCamara = findViewById(R.id.swiCamara);
@@ -49,46 +41,34 @@ public class MainActivity extends AppCompatActivity{
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(swiCamara.isChecked()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this, "Permiso a camara ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                if(swiAlmacenamiento.isChecked()) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                        permisos.add(Manifest.permission.READ_EXTERNAL_STORAGE);
                     }
                 }
                 if(swiUbicacion.isChecked()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this, "Permiso a ubicacion ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                        permisos.add(Manifest.permission.ACCESS_FINE_LOCATION);
                     }
                 }
-                if(swiAlmacenamiento.isChecked()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this, "Permiso a almacenamiento ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-                    }
-                }
-                if(swiContactos.isChecked()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this, "Permiso a contactos ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_CONTACTS}, CONTACTS_PERMISSION_CODE);
+                if(swiCamara.isChecked()) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                        permisos.add(Manifest.permission.CAMERA);
                     }
                 }
                 if(swiTelefono.isChecked()) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this, "Permiso a telefono ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CALL_PHONE}, PHONE_PERMISSION_CODE);
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
+                        permisos.add(Manifest.permission.CALL_PHONE);
                     }
                 }
-                if(CENTINELA)
+                if(swiContactos.isChecked()) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED) {
+                        permisos.add(Manifest.permission.READ_CONTACTS);
+                    }
+                }
+                if(permisos.size() > 0)
                 {
-                    Intent intent = new Intent(getApplicationContext(), RespuestaConfig.class);
-                    startActivity(intent);
-                    CENTINELA = false;
+                    ActivityCompat.requestPermissions(MainActivity.this, permisos.toArray(new String[permisos.size()]), PERMISOS_PERMISSION_CODE);
                 }
             }
         });
@@ -128,34 +108,6 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    /*@Override
-    public void onClick(View v){
-        switch (v.getId()) {
-            case R.id.btnAceptar:
-                if(swiCamara.isChecked())
-                {
-                    System.out.println("Sdkver: " + Integer.valueOf(android.os.Build.VERSION.SDK));
-                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
-                    {
-                        Toast.makeText(MainActivity.this, "Permiso a camara ya ha sido otorgado", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        //requestCameraPermission();
-                        System.out.println("entre aqui");
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-                    }
-                }
-                Intent intent = new Intent(getApplicationContext(), RespuestaConfig.class);
-                startActivity(intent);
-                break;
-            case R.id.btnCancelar:
-                finishAndRemoveTask();
-                break;
-            default:
-                break;
-        }
-    }*/
-
    /* private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA))
         {
@@ -184,7 +136,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        if (requestCode == CAMERA_PERMISSION_CODE)
+        /*if (requestCode == CAMERA_PERMISSION_CODE)
         {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
@@ -242,6 +194,19 @@ public class MainActivity extends AppCompatActivity{
             else
             {
                 Toast.makeText(MainActivity.this, "Permiso Almacenamiento Negado", Toast.LENGTH_SHORT).show();
+            }
+        }*/
+        if (requestCode == PERMISOS_PERMISSION_CODE)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(MainActivity.this, "Permisos Concedido", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), RespuestaConfig.class);
+                startActivity(intent);
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this, "Permisos Negado", Toast.LENGTH_SHORT).show();
             }
         }
     }
