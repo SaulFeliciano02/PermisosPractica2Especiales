@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">IntentosExplicitosPractica2Especiales</string>
+    <string name="Titulo">Elige los permisos a otorgar a la app</string>
+    <string name="Storage">Almacenamiento</string>
+    <string name="StorageDescription">Accede a tus fotos y otros archivos en tu dispositivo</string>
+    <string name="Location">Ubicacion</string>
+    <string name="LocationDescription">Accede a tu ubicacion</string>
+    <string name="Camera">Camara</string>
+    <string name="CameraDescription">Toma fotos y videos</string>
+    <string name="Phone">Telefono</string>
+    <string name="PhoneDescription">Realiza y maneja llamadas telefonicas</string>
+    <string name="Contacts">Contactos</string>
+    <string name="ContactsDescription">Accede a tus contactos</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="Accept">Aceptar</string>
+</resources>
